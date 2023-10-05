@@ -4,6 +4,8 @@ from reviews import const
 
 
 class BaseNameSlugModel(models.Model):
+    """ Базовая модель для приложений Genre и Category."""
+
     name = models.CharField(
         max_length=const.MAX_LENGTH_FIELD,
         unique=True,

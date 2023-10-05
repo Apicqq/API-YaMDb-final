@@ -106,6 +106,8 @@ class TitlePostSerializer(TitleSerializer):
         return value
 
     def validate_genre(self, data):
+        """Проверка поля жанра. Нельзя публиковать произведение без указания
+        его жанра(ов)."""
         if not data:
             raise serializers.ValidationError(
                 'Необходимо указать жанр(ы).'
@@ -113,6 +115,8 @@ class TitlePostSerializer(TitleSerializer):
         return data
 
     def to_representation(self, instance):
+        """Переопределяем метод to_representation, чтобы данные при
+        POST-запросе выдавались как при GET-запросе."""
         return TitleGetSerializer(instance).data
 
 
