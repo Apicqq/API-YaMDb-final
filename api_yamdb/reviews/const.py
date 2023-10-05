@@ -1,0 +1,13 @@
+""" Константы для приложения reviews."""
+
+MAX_STR_LENGTH = 30
+
+MAX_SLUG_LENGTH = 50
+
+MAX_LENGTH_FIELD = 256
+
+REVIEW_TEXT_MAX_LENGTH = 100
+
+MINIMUM_RATING = 1
+
+MAXIMUM_RATING = 10
