@@ -1,6 +1,5 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
-from django.db import IntegrityError
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -91,15 +90,9 @@ class UserSignupView(views.APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            user, created = User.objects.get_or_create(
-                email=serializer.validated_data.get('email'),
-                username=serializer.validated_data.get('username'),
-            )
-        except IntegrityError:
-            return Response('Пользователь с таким именем или адресом '
-                            'электронной почты уже существует.',
-                            status=status.HTTP_400_BAD_REQUEST)
+        user, created = User.objects.get_or_create(
+            email=serializer.validated_data.get('email'),
+            username=serializer.validated_data.get('username'))
         confirmation_code = default_token_generator.make_token(user)
         send_mail(
             subject='Confirmation Code',

@@ -171,15 +171,23 @@ class UserSignupSerializer(serializers.Serializer):
     )
 
     def validate(self, data):
-        if data.get('username') == 'me':
-            raise serializers.ValidationError(
-                'Использовать имя `me` в качестве `username` запрещено.'
+        if User.objects.filter(username=data.get('username')).exists():
+            if User.objects.filter(email=data.get('email')).exists():
+                return data
+            raise ValidationError(
+                'Пользователь с таким именем уже существует.'
             )
-        if User.objects.filter(
-            username=data.get('username'),
-            email=data.get('email')
-        ).exists():
-            return data
+        if User.objects.filter(email=data.get('email')).exists():
+            raise ValidationError(
+                'Пользователь с таким адресом электронной почты уже '
+                'существует.'
+            )
+        return data
+
+    def validate_username(self, data):
+        if data == 'me':
+            raise ValidationError('Нельзя использовать "me" в '
+                                  'качестве имени пользователя')
         return data
 
 
